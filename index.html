@@ -38,6 +38,18 @@
                 { id: 5, name: 'Studio'},
                 { id: 6, name: 'Development'},
             ],
+
+            selectedDeparments: [],
+
+            get filteredEmployees() {
+                return this.employees.filter(employee => {
+                    if(this.selectedDeparments.length) {
+                      return this.selectedDeparments.filter(department => department == employee.department_id).length ? true : false;
+                    }
+                    return true;
+                })
+            },
+
             employees: [
                 {
                     name: 'Phil',
@@ -102,7 +114,7 @@
                     name: 'Ruby',
                     job: 'Junior designer ',
                     image: 'Us_headshots_0003_Ruby-1.jpg',
-                    department: 'Creative',
+                    department_id: 2,
                 },
                 {
                     name: 'Neil',
@@ -198,14 +210,16 @@
            
             <template x-for="department in departments">
                 <div>
-                    <label>
                         
                     <label class="container"> 
                         <span x-text="department.name"></span>
-                      <input type="checkbox">
-                      <span class="checkmark"></span>
-                    
-
+                        <input 
+                            type="checkbox" 
+                            name="deparments" 
+                            x-model="selectedDeparments" 
+                            :value="department.id"
+                        >
+                        <span class="checkmark"></span>
                         
                     </label>
                 </div>
@@ -219,7 +233,7 @@
             id="container" 
         >
              
-            <template x-for="employee in employees">
+            <template x-for="employee in filteredEmployees">
                 <div class="box">
                     <h2 class="employee-name" x-text="employee.name"></h2>
                     <p class="employee-job" x-text="employee.job"></p>
